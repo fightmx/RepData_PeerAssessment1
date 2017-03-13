@@ -2,14 +2,16 @@
 title: "PA1_template.Rmd"
 author: "RODRIGO JUAREZ"
 date: "12 de marzo de 2017"
-output: html_document
+output: 
+  html_document: 
+    keep_md: true 
 ---
 
 ##Loading and preprocessing the data
 
 1. Load the data
 
-```{r}
+```{r echo = TRUE }
 data <- read.csv("activity.csv")
 head(data)
 
@@ -17,7 +19,7 @@ head(data)
 
 2. Process/transform the data (if necessary) into a format suitable for your analysis
 
-```{r}
+```{r echo = TRUE }
 data$date <- as.Date(strptime(data$date, "%Y-%m-%d"))
 ```
 
@@ -27,13 +29,13 @@ data$date <- as.Date(strptime(data$date, "%Y-%m-%d"))
 
 1. Calculate the total number of steps taken per day
 
-```{r}
+```{r echo = TRUE }
 totalStepsByDay <- with(data, tapply(steps, date, sum, na.rm = T))
 ```
 
 2. If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 
-```{r}
+```{r echo = TRUE }
 hist(
   totalStepsByDay, 
   main = "Histogram", 
@@ -47,7 +49,7 @@ hist(
 
 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+```{r echo = TRUE }
 mean(totalStepsByDay)
 median(totalStepsByDay)
 ```
@@ -56,7 +58,7 @@ median(totalStepsByDay)
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r}
+```{r echo = TRUE }
 averageDailyActivity <- aggregate(steps ~ interval, data = data, FUN = mean)
 plot(
   averageDailyActivity, 
@@ -69,7 +71,7 @@ plot(
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+```{r echo = TRUE }
 totalDailyActivity <- aggregate(steps ~ interval, data = data, FUN = sum)
 totalDailyActivity[totalDailyActivity$steps == max(totalDailyActivity),]
 ```
@@ -80,7 +82,7 @@ totalDailyActivity[totalDailyActivity$steps == max(totalDailyActivity),]
 
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
-```{r}
+```{r echo = TRUE }
 sum(is.na(data$steps))
 ```
 
@@ -88,7 +90,7 @@ sum(is.na(data$steps))
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{r}
+```{r echo = TRUE }
 filledData <- data
 for(i in 1:nrow(filledData)){
   if(is.na(filledData[i,1])){
@@ -104,7 +106,7 @@ filledTotalStepsByDay <-
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r}
+```{r echo = TRUE }
 
 mean(filledTotalStepsByDay)
 median(filledTotalStepsByDay)
@@ -127,7 +129,7 @@ hist(
 
 1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{r}
+```{r echo = TRUE }
 library(timeDate)
 filledData$day_of_week <- 
   ifelse(isWeekday(data$date) == TRUE, "weekday", "weekend")
@@ -136,7 +138,7 @@ filledData$day_of_week <-
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-```{r}
+```{r echo = TRUE }
 library(lattice)
 xyplot(steps ~ interval | day_of_week, data=filledData, type="l", layout = c(1, 2))
 
